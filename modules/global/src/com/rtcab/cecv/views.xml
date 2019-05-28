@@ -3,6 +3,7 @@
 
     <view entity="cecv_Customer" name="customer-view" extends="_local">
         <property name="orders" view="_local"/>
+        <property name="customerTotalTurnover" view="_local"/>
     </view>
     <view entity="cecv_Order" name="order-view" extends="_local">
         <property name="customer" view="_minimal"/>

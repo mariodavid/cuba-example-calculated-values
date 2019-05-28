@@ -4,5 +4,6 @@
 
         <class>com.rtcab.cecv.entity.Customer</class>
         <class>com.rtcab.cecv.entity.Order</class>
+        <class>com.rtcab.cecv.entity.CustomerTurnoverView</class>
     </persistence-unit>
 </persistence>

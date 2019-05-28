@@ -13,7 +13,7 @@ There are several solutions to this problem, where each solution has its own pro
 options one-by-one.
 
 
-## Solution 1: Generated column
+## Solution 1: Generated Column
 
 The first option to display the total turnover of a customer in the customer browse screen is to add a generated column
 to the customers table. The generated column calculates the total turnover at the time where the table is displayed on the fly.
@@ -114,7 +114,7 @@ on the database level.
 * Sorting is not possible
 
 
-## Solution 2: persisted attribute
+## Solution 2: Persisted Attribute
 
 The second option that will enable to calculate and display the total turnover for each
 customer as well. In this case the value is calculated at the point where the data is stored
@@ -207,6 +207,124 @@ as any other attribute in the customer entity.
 
 
 
+## Solution 3: SQL View
+
+The third solution is a solves the problems of the first and the second solution. In this case a SQL View
+is defined, that will to the aggregation. Then this view is mapped to an JPA entity, which will be linked
+into to the customer.
+
+This way, the database still knows about the data, therefore it is possible to filter / sort for the column.
+However, the data is not persisted, but calculated on the fly during fetching the data from the view.
+
+With JPA is possible to map an entity against a database view instead of a regular table, which is crucial
+to the CUBA application, since mostly all functionalities are based on this fundamental building block.
+
+### Implementation
+
+#### SQL View creation
+
+The first step is to define the SQL view and update the database accordingly. The `30.create-db.sql` as well
+as the `190528-4-createCustomerTurnoverView.sql` contain the view definition:
+
+```sql
+create view CECV_CUSTOMER_TURNOVER_VIEW as
+select
+sum(o.order_amount) TOTAL_TURNOVER,
+c.id ID,
+c.id CUSTOMER_ID,
+c.VERSION,
+c.CREATE_TS,
+c.CREATED_BY,
+c.UPDATE_TS,
+c.UPDATED_BY,
+c.DELETE_TS,
+c.DELETED_BY
+from   CECV_CUSTOMER c
+join   CECV_ORDER o
+on     c.id = o.customer_id
+group by c.id;
+```
+
+Here it is important to define the columns that should be available for the CUBA JPA entity. The view contains
+all the infrastructure attributes (`ID`, `VERSION`, `DELETE_TS`) and re-uses them directly from the customer.
+
+Then the aggregation is calculated via the `TOTAL_TURNOVER` column.
+
+#### CustomerTurnoverView Entity
+
+The second step is to create an entity and map it to the view:
+
+```
+@DesignSupport("{'dbView':true,'generateDdl':false}")
+@Table(name = "CECV_CUSTOMER_TURNOVER_VIEW")
+@Entity(name = "cecv_CustomerTurnoverView")
+public class CustomerTurnoverView extends StandardEntity {
+    private static final long serialVersionUID = -6969369474397318400L;
+
+    @Column(name = "TOTAL_TURNOVER")
+    protected Double totalTurnover;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CUSTOMER_ID")
+    protected Customer customer;
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Double getTotalTurnover() {
+        return totalTurnover;
+    }
+
+    public void setTotalTurnover(Double totalTurnover) {
+        this.totalTurnover = totalTurnover;
+    }
+}
+```
+
+On the Customer entity, there will also be a connection to `CustomerTurnoverView` as a One-to-One connection:
+
+```
+@OneToOne(fetch = FetchType.LAZY, mappedBy = "customer")
+protected CustomerTurnoverView customerTotalTurnover;
+```
+
+#### Show totalTurnover attribute in UI
+
+With that connection in place, it is possible to show the `totalTurnover` attribute through the `customerTotalTurnover`
+association in the UI:
+
+```xml
+<groupTable id="customersTable"
+                    width="100%"
+                    dataContainer="customersDc">
+<!-- ... --->
+<columns>
+    <column id="name"/>
+    <!-- ... --->
+    <column id="customerTotalTurnover.totalTurnover" />
+</columns>
+```
 
 
 
+### Summary
+
+This solution still keeps the aggregation logic in the database. Therefore sorting / filtering is possible.
+Compared to solution 2, it does not require to duplicate data. This is the main benefit over the persisted attribute.
+The trade-off here is that it has to be calculated on the fly, which basically boils down to performance. This could furthermore
+be solved by a materialized view e.g.
+
+#### Pros:
+* filtering is possible
+* sorting is possible
+* other platform features are also usable (e.g security constraints based on this calculated value)
+* no data duplication
+
+#### Cons:
+* only limited to the aggregation possibilities of the SQL database
+* Views require a little more manual mapping against the JPA entity

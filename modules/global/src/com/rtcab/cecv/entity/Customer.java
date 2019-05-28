@@ -6,10 +6,7 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @NamePattern("%s|name")
@@ -28,6 +25,17 @@ public class Customer extends StandardEntity {
 
     @Column(name = "PERSISTET_TOTAL_TURNOVER")
     protected Double persistetTotalTurnover;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer")
+    protected CustomerTurnoverView customerTotalTurnover;
+
+    public CustomerTurnoverView getCustomerTotalTurnover() {
+        return customerTotalTurnover;
+    }
+
+    public void setCustomerTotalTurnover(CustomerTurnoverView customerTotalTurnover) {
+        this.customerTotalTurnover = customerTotalTurnover;
+    }
 
     public Double getPersistetTotalTurnover() {
         return persistetTotalTurnover;

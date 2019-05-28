@@ -36,6 +36,7 @@
                 <column id="name"/>
                 <column id="persistetTotalTurnover" />
                 <column id="totalTurnover" />
+                <column id="customerTotalTurnover.totalTurnover" />
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
