@@ -62,10 +62,15 @@ public class Customer extends StandardEntity {
     }
 
     public Double calculateTotalTurnover() {
+
+        if (getOrders() == null) {
+            return 0d;
+        }
         return getOrders()
                 .stream()
                 .map(Order::getOrderAmount)
                 .reduce((a, b) -> a + b)
                 .orElse(0d);
+
     }
 }
