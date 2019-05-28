@@ -23,11 +23,19 @@ public class Customer extends StandardEntity {
     @OneToMany(mappedBy = "customer")
     protected List<Order> orders;
 
-    @Column(name = "PERSISTET_TOTAL_TURNOVER")
-    protected Double persistetTotalTurnover;
+    @Column(name = "PERSISTED_TOTAL_TURNOVER")
+    protected Double persistedTotalTurnover;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "customer")
     protected CustomerTurnoverView customerTotalTurnover;
+
+    public Double getPersistedTotalTurnover() {
+        return persistedTotalTurnover;
+    }
+
+    public void setPersistedTotalTurnover(Double persistedTotalTurnover) {
+        this.persistedTotalTurnover = persistedTotalTurnover;
+    }
 
     public CustomerTurnoverView getCustomerTotalTurnover() {
         return customerTotalTurnover;
@@ -35,14 +43,6 @@ public class Customer extends StandardEntity {
 
     public void setCustomerTotalTurnover(CustomerTurnoverView customerTotalTurnover) {
         this.customerTotalTurnover = customerTotalTurnover;
-    }
-
-    public Double getPersistetTotalTurnover() {
-        return persistetTotalTurnover;
-    }
-
-    public void setPersistetTotalTurnover(Double persistetTotalTurnover) {
-        this.persistetTotalTurnover = persistetTotalTurnover;
     }
 
     public List<Order> getOrders() {

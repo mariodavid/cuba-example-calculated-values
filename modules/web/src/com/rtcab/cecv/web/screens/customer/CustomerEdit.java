@@ -2,7 +2,6 @@ package com.rtcab.cecv.web.screens.customer;
 
 import com.haulmont.cuba.gui.screen.*;
 import com.rtcab.cecv.entity.Customer;
-import com.rtcab.cecv.entity.Order;
 
 @UiController("cecv_Customer.edit")
 @UiDescriptor("customer-edit.xml")
@@ -17,7 +16,7 @@ public class CustomerEdit extends StandardEditor<Customer> {
 
         Double totalTurnover = customer.calculateTotalTurnover();
 
-        customer.setPersistetTotalTurnover(totalTurnover);
+        customer.setPersistedTotalTurnover(totalTurnover);
     }
     
     

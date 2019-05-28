@@ -10,7 +10,7 @@ create table CECV_CUSTOMER (
     DELETED_BY varchar(50),
     --
     NAME varchar(255),
-    PERSISTET_TOTAL_TURNOVER double precision,
+    PERSISTED_TOTAL_TURNOVER double precision,
     --
     primary key (ID)
 )^

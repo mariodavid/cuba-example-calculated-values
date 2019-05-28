@@ -1,10 +1,12 @@
 package com.rtcab.cecv.entity;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.global.DesignSupport;
 
 import javax.persistence.*;
 
+@NamePattern("%s|totalTurnover")
 @DesignSupport("{'dbView':true,'generateDdl':false}")
 @Table(name = "CECV_CUSTOMER_TURNOVER_VIEW")
 @Entity(name = "cecv_CustomerTurnoverView")

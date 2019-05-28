@@ -1,1 +1,1 @@
-alter table CECV_CUSTOMER add column PERSISTET_TOTAL_TURNOVER double precision ;
+alter table CECV_CUSTOMER add column PERSISTED_TOTAL_TURNOVER double precision ;

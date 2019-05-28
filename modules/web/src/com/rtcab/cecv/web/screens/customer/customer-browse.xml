@@ -34,7 +34,7 @@
             </actions>
             <columns>
                 <column id="name"/>
-                <column id="persistetTotalTurnover" />
+                <column id="persistedTotalTurnover" />
                 <column id="totalTurnover" />
                 <column id="customerTotalTurnover.totalTurnover" />
             </columns>

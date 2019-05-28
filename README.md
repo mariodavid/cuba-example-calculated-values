@@ -139,15 +139,15 @@ public class Customer extends StandardEntity {
 
     // ...
 
-    @Column(name = "PERSISTET_TOTAL_TURNOVER")
-    protected Double persistetTotalTurnover;
+    @Column(name = "PERSISTED_TOTAL_TURNOVER")
+    protected Double persistedTotalTurnover;
 
-    public Double getPersistetTotalTurnover() {
-        return persistetTotalTurnover;
+    public Double getPersistedTotalTurnover() {
+        return persistedTotalTurnover;
     }
 
-    public void setPersistetTotalTurnover(Double persistetTotalTurnover) {
-        this.persistetTotalTurnover = persistetTotalTurnover;
+    public void setPersistedTotalTurnover(Double persistedTotalTurnover) {
+        this.persistedTotalTurnover = persistedTotalTurnover;
     }
 
 }
@@ -171,16 +171,14 @@ import com.rtcab.cecv.entity.Order;
 @LoadDataBeforeShow
 public class CustomerEdit extends StandardEditor<Customer> {
 
-
     @Subscribe
     protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
         Customer customer = getEditedEntity();
 
         Double totalTurnover = customer.calculateTotalTurnover();
 
-        customer.setPersistetTotalTurnover(totalTurnover);
+        customer.setPersistedTotalTurnover(totalTurnover);
     }
-
 
 }
 ```
