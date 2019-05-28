@@ -211,6 +211,10 @@ The third solution is a solves the problems of the first and the second solution
 is defined, that will to the aggregation. Then this view is mapped to an JPA entity, which will be linked
 into to the customer.
 
+
+![solution-3](https://github.com/mariodavid/cuba-example-calculated-values/blob/master/img/solution-3.png)
+
+
 This way, the database still knows about the data, therefore it is possible to filter / sort for the column.
 However, the data is not persisted, but calculated on the fly during fetching the data from the view.
 
