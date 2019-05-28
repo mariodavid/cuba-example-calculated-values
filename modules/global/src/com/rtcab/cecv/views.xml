@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+
+    <view entity="cecv_Customer" name="customer-view" extends="_local">
+        <property name="orders" view="_local"/>
+    </view>
+    <view entity="cecv_Order" name="order-view" extends="_local">
+        <property name="customer" view="_minimal"/>
+    </view>
+</views>
