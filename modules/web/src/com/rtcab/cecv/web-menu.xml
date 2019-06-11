@@ -2,5 +2,6 @@
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
     <menu id="application-cecv" insertBefore="administration">
         <item screen="cecv_Customer.browse"/>
+        <item screen="cecv_CustomerTurnover.browse"/>
     </menu>
 </menu-config>

@@ -329,3 +329,73 @@ be solved by a materialized view e.g.
 #### Cons:
 * only limited to the aggregation possibilities of the SQL database
 * Views require a little more manual mapping against the JPA entity
+
+
+
+## Solution 4: Key-Value Entity
+
+The forth option to display the total turnover of a customer in the customer browse screen is to use the Key-Value entity functionality
+from CUBA.
+
+![solution-4](https://github.com/mariodavid/cuba-example-calculated-values/blob/master/img/solution-4.png)
+
+### Implementation
+
+The following two steps are necessary to create the a Key-Value based screen
+
+#### Create a KV-collection data container
+```xml
+<keyValueCollection id="customerTurnoverDc">
+            <properties>
+                <property name="Customer" class="com.rtcab.cecv.entity.Customer" />
+                <property datatype="decimal" name="TotalTurnover"/>
+            </properties>
+            <loader id="customerTurnoverDl">
+                <query>
+                    <![CDATA[select o.customer as Customer, sum(o.orderAmount) as TotalTurnover from cecv_Order o group by o.customer]]>
+                </query>
+            </loader>
+        </keyValueCollection>
+```
+The JPQL query calculates the sum of order amounts. Additionally it creates a reference to the customer and groups by it.
+
+
+#### Referencing the properties in the table
+
+After the definition of the columns, they can be referenced in the table via its names:
+
+```xml
+<table id="customersTable"
+            width="100%"
+            dataContainer="customerTurnoverDc">
+    <actions>
+        <action id="create" type="create"/>
+        <action id="edit" type="edit"/>
+        <action id="remove" type="remove"/>
+    </actions>
+    <columns>
+        <column id="Customer"/>
+        <column id="TotalTurnover"/>
+    </columns>
+    <rowsCount/>
+    <buttonsPanel id="buttonsPanel"
+                  alwaysVisible="true">
+        <button id="createBtn" action="customersTable.create"/>
+        <button id="editBtn" action="customersTable.edit"/>
+        <button id="removeBtn" action="customersTable.remove"/>
+    </buttonsPanel>
+</table>
+```
+
+
+### Summary
+
+The KV-Entity approach from CUBA is designed specifically for this use-case.
+
+#### Pros:
+* native support without programmatic definition
+* Sorting is possible
+
+#### Cons:
+* restricted to the JPQL language and its aggregation possibilities
+* Filtering is not possible

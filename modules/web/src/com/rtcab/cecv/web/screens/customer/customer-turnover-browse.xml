@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseKVCaption"
+        focusComponent="customersTable"
+        messagesPack="com.rtcab.cecv.web.screens.customer">
+    <data readOnly="true">
+        <keyValueCollection id="customerTurnoverDc">
+            <properties>
+                <property name="Customer" class="com.rtcab.cecv.entity.Customer" />
+                <property datatype="decimal" name="TotalTurnover"/>
+
+            </properties>
+            <loader id="customerTurnoverDl">
+                <query>
+                    <![CDATA[select o.customer as Customer, sum(o.orderAmount) as TotalTurnover from cecv_Order o group by o.customer]]>
+                </query>
+            </loader>
+        </keyValueCollection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="customersTable"
+            spacing="true">
+        <table id="customersTable"
+                    width="100%"
+                    dataContainer="customerTurnoverDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="Customer"/>
+                <column id="TotalTurnover"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="customersTable.create"/>
+                <button id="editBtn" action="customersTable.edit"/>
+                <button id="removeBtn" action="customersTable.remove"/>
+            </buttonsPanel>
+        </table>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
